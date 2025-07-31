@@ -1,0 +1,73 @@
+services:
+  tripsummit_web:
+    container_name: tripsummit_web
+    image: syshero/tripsummit-laravel:1.0.0
+    environment:
+        DB_HOST: db
+        MEMCACHED_HOST: memcached
+        REDIS_HOST: redis
+    restart: always
+    volumes:
+      - storage_data:/var/www/html/storage
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+      - redis
+      - memcached
+    networks:
+      - laravel
+
+  db:
+    image: mysql:8.0
+    container_name: tripsummit_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tripsummit
+    expose:
+      - 3306
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - laravel
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: tripsummit_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+  redis:
+    image: redis:7-alpine
+    container_name: tripsummit_redis
+    restart: always
+    expose:
+      - 6379
+    networks:
+      - laravel
+
+  memcached:
+    image: memcached:alpine
+    container_name: tripsummit_memcached
+    expose:
+      - 11211
+    networks:
+      - laravel
+
+volumes:
+  db_data:
+  storage_data:
+
+networks:
+  laravel:
+    driver: bridge
