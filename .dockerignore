@@ -1,0 +1,37 @@
+# Laravel & Composer
+/vendor
+/node_modules
+/.env
+/.env.*
+/storage/*.key
+/storage/*.log
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/bootstrap/cache/*.php
+
+# Vite/Node
+/public/dist
+/public/dist-front
+
+# IDE/editor
+*.swp
+*.swo
+*.idea
+*.vscode
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Misc
+npm-debug.log
+yarn-error.log
+composer.lock

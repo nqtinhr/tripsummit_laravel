@@ -1,0 +1,50 @@
+services:
+  tripsummit_laravel:
+    container_name: tripsummit_laravel
+    image: syshero/tripsummit-laravel:1.0.0
+    restart: always
+    volumes:
+      - storage_data:/var/www/html/storage
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+  db:
+    image: mysql:8.0
+    container_name: laravel_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tripsummit
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - laravel
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: laravel_phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+volumes:
+  db_data:
+  storage_data:
+
+networks:
+  laravel:
+    driver: bridge
